@@ -1,0 +1,25 @@
+---
+// content server side only - momento de construccion BUILD TIME
+import PokemonCard from "../components/pokemones/PokemonCard.astro";
+import type { PokemonListResponse } from "../interfaces/pokemon-list.response";
+import MainLayout from "../layout/MainLayout.astro";
+
+const resp = await fetch("https://pokeapi.co/api/v2/pokemon");
+const data: PokemonListResponse = await resp.json();
+
+console.log(data);
+---
+
+<MainLayout title="Home Page">
+  <h1 class="text-3xl mt-10">Listado de Pokémones</h1>
+  <hr />
+
+  <section
+    aria-label="Listado de Pokemones"
+    class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-4 mt-10"
+  >
+    {data.results.map((p) => <PokemonCard name={p.name} url={p.url} />)}
+  </section>
+  <!-- <ul>
+  </ul> -->
+</MainLayout>

@@ -1,0 +1,55 @@
+---
+import type { GetStaticPaths } from "astro";
+import MainLayout from "../../layout/MainLayout.astro";
+
+interface Props {
+  name: string;
+  url: string;
+  isBig?: boolean;
+}
+
+const { name, url, isBig = false } = Astro.props;
+
+console.log(url);
+// corta por los slach y toma la posicon menos 2 que es un numero id
+const id = url.split("/").at(-2);
+
+console.log(isBig);
+
+const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+---
+<!-- href={`/pokemons/${name}`} -->
+<a
+href={`/pokemons/${name}`}
+  class:list={[
+    `rounded flex flex-col items-center justify-center p-2 `,
+    {
+      border: !isBig,
+    },
+  ]}
+>
+  <img
+    src={image}
+    alt="pokemon"
+    transition:name={`${name}-image`}
+    class:list={[
+      // <!-- tiene que ser un nombre unico  transition:name-->
+    
+      {
+        "w-16 h-16": !isBig,
+        "w-44 h-44": isBig,
+      },
+    ]}
+  />
+  <h3
+    class:list={[
+      `mt-3 capitalize`,
+      {
+        "text-3xl text-blue-300": isBig,
+      },
+    ]}
+  >
+    #{id}
+    {name}
+  </h3></a
+>
