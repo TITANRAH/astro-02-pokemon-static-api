@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
+// import { ViewTransitions } from 'astro:transitions';
 import { siteInfo } from '../const/site-info';
 
 interface Props {
@@ -30,7 +30,13 @@ const { title = siteInfo.title, description = siteInfo.description, image } = As
 
     <title>{title}</title>
 
-    <ViewTransitions/>
+    <style>
+      @view-transition {
+         navigation: auto;
+      }
+    </style>
+
+   
   </head>
   <body class="bg-slate-800 text-slate-100 m-auto max-w-3xl">
     <main class="">
