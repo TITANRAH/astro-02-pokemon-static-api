@@ -1,0 +1,20 @@
+https://www.creative-tim.com/twcomponents/component/simple-navbar-3 
+tailwind components
+
+instalo esto 
+astro icons npx astro add astro-icon
+
+dspues llamo a <Icon name= <aqui le paso el nombre del icono svg que tome de la url de abajo/>
+
+iconify svgs https://icon-sets.iconify.design
+
+
+ciclo de vida 
+https://docs.astro.build/en/guides/view-transitions/#lifecycle-events
+
+solid
+npx astro add solid
+
+los clientes de isla tambien tienen ciclos 
+
+https://docs.astro.build/en/reference/directives-reference/#client-directives

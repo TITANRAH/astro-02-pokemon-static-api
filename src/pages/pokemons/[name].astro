@@ -3,6 +3,8 @@ import type { GetStaticPaths } from "astro";
 import MainLayout from "../../layout/MainLayout.astro";
 import PokemonCard from "../../components/pokemones/PokemonCard.astro";
 import type { PokemonListResponse } from "../../interfaces/pokemon-list.response";
+import Title from "@components/shared/Title.astro";
+import { Icon } from "astro-icon/components";
 
 // para recibir rutas con parametros debo definir que recibire
 // y compo la cantidad de pokemones viene de la pagina anterior
@@ -46,12 +48,24 @@ const audioSrc = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pok
 <MainLayout
   title=`Pokemon - #${id} ${name}`
   description=`Información sobre el Pokemon ${name}`
-  image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+  image=`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`
+  ;
 >
   <section class="mt-10 mx-10 flex flex-col justify-center items-center">
-    <div>
-      <a class="hover:underline hover:text-blue-500" href="/">Regresar</a>
-      <h1 class="text-5xl capitalize">{name}</h1>
+    <div class="flex flex-row gap-3">
+      <div>
+        <button onclick="history.back()" class="tex-blue-500">Regresar</button>
+        <Title> {name} </Title>
+      </div>
+      <button id="btn-favorite" data-name={name} data-id={id}>
+        <Icon
+          data-outline
+          class="text-red-400"
+          name="heart-outline"
+          size={50}
+        />
+        <Icon data-full class="hidden" name="heart-full" size={50} />
+      </button>
     </div>
 
     <PokemonCard name={name} url={url} isBig={true} />
@@ -63,3 +77,115 @@ const audioSrc = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pok
     </audio>
   </section>
 </MainLayout>
+
+<script>
+ 
+
+  // document.addEventListener('astro:before-preparation', () => {
+  //   console.log('astro:before-preparation');
+  // })
+  // document.addEventListener('astro:after-preparation', () => {
+  //   console.log('astro:after-preparation');
+  // })
+  // document.addEventListener('astro:before-swap', () => {
+  //   console.log('astro:before-swap');
+  // })
+  // document.addEventListener('astro:after-swap', () => {
+  //   console.log('astro:after-swap');
+  // })
+  // document.addEventListener('astro:page-load', () => {
+  //   console.log('hola')
+  // },
+  // {once: true} esto hace que se dispare el listener solo una vez
+  // );
+
+import type { FavoritePokemon } from "@interfaces/favorite-pokemon";
+
+  const handlePageLoad = () => {
+
+    //  document.addEventListener('astro:page-load', () => {
+
+    let favoritePokemons: FavoritePokemon[] = JSON.parse(
+      // ponerlo como string el [ ] despues regresaraa un arreglo vacio
+      localStorage.getItem("favorites") ?? "[]"
+    );
+
+
+
+    console.log(favoritePokemons);
+    // obtengo el boton
+    const btnFavorite = document.querySelector(
+      "#btn-favorite"
+    ) as HTMLButtonElement;
+
+    // si no hay boton return
+    if (!btnFavorite) return;
+
+    //  asi obtengo los atributos que le estoy pasando al btn en html
+    const name = btnFavorite.dataset.name ?? "";
+    const id = btnFavorite.dataset.id ?? "";
+
+    const isFavorite = favoritePokemons.some((fav) => fav.name === name);
+
+
+    // obtengo los 2 svg que esta dentro del boton
+    const heartOutline = btnFavorite.querySelector(
+      "[data-outline]"
+    ) as HTMLElement;
+
+    const heartFull = btnFavorite.querySelector("[data-full]") as HTMLElement;
+
+    // const exist = favoritePokemons.find((p) => p.name === name);
+
+    if (isFavorite) {
+      console.log("exist");
+      heartOutline.classList.add("hidden");
+      heartFull.classList.remove("hidden");
+    }
+
+    const toggleFavorite = () => {
+      // some evalua el arreglo apenas encuentre una condicion true deja de evaluar lo demas
+      // entonces con esto sabremos si agregar o lo remuevo del arreglo en base a si existe o no el pokemon
+      const isFavorite = favoritePokemons.some((fav) => fav.name === name);
+
+      if (isFavorite) {
+        // si ya esta el pokemon sacalo del arreglo
+        favoritePokemons = favoritePokemons.filter((fav) => fav.name !== name);
+      } else {
+        // si no esta agregalo al arreglo
+        favoritePokemons.push({
+          id: +id,
+          name: name,
+        });
+      }
+
+      // localstorage solo permite guardar strings por eso pasamos el arreglo a strings
+
+      localStorage.setItem("favorites", JSON.stringify(favoritePokemons));
+    };
+
+    // console.log(id);
+    // console.log(name);
+
+    // añade alboton la funcion click
+    btnFavorite.addEventListener("click", () => {
+      console.log("hizo click");
+      // console.log({ name, id });
+
+      heartOutline.classList.toggle("hidden");
+      heartFull.classList.toggle("hidden");
+
+      // trae la funcion que hace el guardado o saca el pokemon del arreeglo
+      toggleFavorite();
+    });
+    // })
+  };
+
+  document.addEventListener("astro:page-load", handlePageLoad);
+</script>
+
+<style>
+  #btn-favorite {
+    @apply hover:animate-pulse;
+  }
+</style>

@@ -4,6 +4,7 @@ import type { GetStaticPaths } from "astro";
 import PokemonCard from "../../components/pokemones/PokemonCard.astro";
 import type { PokemonListResponse } from "../../interfaces/pokemon-list.response";
 import MainLayout from "../../layout/MainLayout.astro";
+import Title from "@components/shared/Title.astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const resp = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
@@ -21,7 +22,8 @@ console.log(page);
 ---
 
 <MainLayout title="Home Page">
-  <h1 class="text-3xl mt-10">Listado de Pokémones</h1>
+  <Title> Listado de Pokémones </Title>
+  <!-- <h1 class="text-3xl mt-10">Listado de Pokémones</h1> -->
   <hr />
 
   <section
@@ -45,13 +47,16 @@ console.log(page);
       ]}>Anteriores</a
     >
 
-    <a href={page.url.next}  class:list={[
-      "btn",
-      {
-        // clase instanciada en style
-        disable: !page.url.next,
-      },
-    ]}>Siguientes</a>
+    <a
+      href={page.url.next}
+      class:list={[
+        "btn",
+        {
+          // clase instanciada en style
+          disable: !page.url.next,
+        },
+      ]}>Siguientes</a
+    >
 
     <div class="flex flex-1"></div>
     <span class="text-xl font-bold">Página {page.currentPage}</span>

@@ -1,0 +1,40 @@
+---
+import { Counter } from "@components/Counter";
+import Title from "@components/shared/Title.astro";
+import MainLayout from "src/layout/MainLayout.astro";
+
+const counterValue = 20;
+---
+
+<MainLayout title="islas">
+  <Title> Islas </Title>
+
+  <!-- <h2>Hola Mundo</h2> -->
+
+  <!-- esto seria un componente creado con solid 
+  cuando quiero detectar una usla la flecha del front en el ayudante del navegadir
+  las detecta -->
+
+  <!-- client:load cuando carga el componente -->
+  <!-- <Counter client:load/> -->
+
+  <!-- client:visible el js trabaja cuando se muestra en pantalla -->
+
+  <!-- tengo dos componentes con distintos initValues uno es 20 y el otro es 15 
+  ero al poner estas propiedades se unifican y manttienen el estado aunque 
+  cambie de pagina o se instancie el componente en otras paginas -->
+  <!-- transition:persist y transition:persist-props esto uso para persistir el estado del counter value en todos los componentes donde use Counter 
+  para elue use le mismo valor  -->
+
+  <!-- <video controls="" autoplay="" transition:persist="video-player">
+    <source src="https://ia804502.us.archive.org/33/items/GoldenGa1939_3/GoldenGa1939_3_512kb.mp4" type="video/mp4">
+  </video> -->
+  <Counter
+    transition:persist="counter"
+    transition:persist-props
+    client:visible
+    initValue={counterValue}
+  >
+    <Title>Counter Island</Title>
+  </Counter>
+</MainLayout>
